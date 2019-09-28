@@ -1,19 +1,23 @@
 const { Lifetime, RESOLVER } = require('awilix')
-const Router = require('koa-router')
 
-module.exports = class ApiRouter {
-  constructor({ holiService }) {
-    this.holiService = holiService
+const { makeInvoker } = require('awilix-koa')
+
+module.exports = class MakeApi {
+  makeApi({ holiService, logger }) {
+    return {
+      getHoli: ctx => {
+        holiService.sayHoli(ctx)
+      },
+      writeHoli: ctx => {
+        holiService.writeHoli(ctx, logger)
+      }
+    }
   }
 
-  createRouter(ctx) {
-    const router = new Router()
-    router.get('/holi', ctx => {
-      const srvc = ctx.state.container.resolve('holiService')
-      srvc.sayHoli(ctx)
-    })
-
-    return router
+  initRouter(router) {
+    const api = makeInvoker(this.makeApi)
+    router.get('/holi', api('getHoli'))
+    router.post('/holi', api('writeHoli'))
   }
 }
 

@@ -19,12 +19,9 @@ const container = makeContainer()
 app.use(scopePerRequest(container))
 app.use(loggingMiddleware)
 
-const router = container.resolve('apiRouter').createRouter()
-
-// router.get('/holi', ctx => {
-//   const srvc = container.resolve('holiService')
-//   srvc.sayHoli(ctx)
-// })
+const router = new Router()
+const apiR = container.resolve('apiRouter')
+apiR.initRouter(router)
 
 
 app.use(router.routes())
