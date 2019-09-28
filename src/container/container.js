@@ -4,6 +4,7 @@ module.exports = () => {
   const container = createContainer().loadModules(
     [
       ['../services/HoliService.js', Lifetime.SCOPED] ,
+      ['../router/router.js', Lifetime.SCOPED] ,
     ],
     {
       formatName: 'camelCase',

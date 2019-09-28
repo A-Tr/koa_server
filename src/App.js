@@ -14,18 +14,17 @@ debug('booting %s', name)
 const makeContainer = require('./container/container')
 
 const app = new Koa()
-const router = new Router()
 
 const container = makeContainer()
-
-
 app.use(scopePerRequest(container))
 app.use(loggingMiddleware)
 
-router.get('/holi', ctx => {
-  const srvc = container.resolve('holiService')
-  srvc.sayHoli(ctx)
-})
+const router = container.resolve('apiRouter').createRouter()
+
+// router.get('/holi', ctx => {
+//   const srvc = container.resolve('holiService')
+//   srvc.sayHoli(ctx)
+// })
 
 
 app.use(router.routes())
