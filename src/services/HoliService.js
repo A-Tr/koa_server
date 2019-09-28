@@ -1,10 +1,10 @@
 module.exports = class HoliService {
   constructor({logger}) {
-    this.logger = logger.newLogger()
+    this.logger = logger
   }
 
   sayHoli(ctx) {
-    this.logger.info('joli')
+    this.logger.info(`This is the ctx: ${JSON.stringify(ctx)}`)
     ctx.body = ('OH boi')
     return
   }

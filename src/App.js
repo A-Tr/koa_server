@@ -1,13 +1,14 @@
 const Koa = require('koa')
 const Router = require('koa-router')
 const HoliService = require('./services/HoliService')
-const { asClass, asValue, createContainer, Lifetime } = require('awilix')
+const { asClass, asValue, asFunction, createContainer, Lifetime } = require('awilix')
 const { scopePerRequest } = require('awilix-koa')
-const logger = require('./logger/logger')
+const uuidv4 = require('uuid/v4');
+
+const loggerBuilder = require('./logger/logger')
 const awilix = require('awilix')
 
 const container = createContainer().register({
-  logger: asClass(logger),
   holiService: asClass(HoliService).scoped()
 })
 
@@ -21,15 +22,20 @@ const app = new Koa()
 const router = new Router()
 
 app.use((ctx, next) => {
-  console.log('Registering scoped stuff')
-  ctx.scope = container.createScope()
+  const logger = loggerBuilder(uuidv4(), ctx.ip)
+  logger.info(`Creating scope for request: ${ctx.ip}`)
+  ctx.scope = container.createScope().register({
+    logger: asValue(logger),
+  })
+
+  
   // based on the query string, let's make a user..
   return next()
 })
 
 router.get('/holi', ctx => {
   const handle = ctx.scope.resolve('holiService')
-  handle.sayHoli(ctx)
+  return handle.sayHoli(ctx)
 })
 
 app.use(router.routes())
