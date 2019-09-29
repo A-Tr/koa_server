@@ -1,29 +1,40 @@
 const { Lifetime, RESOLVER } = require('awilix')
 
 module.exports = class PersonService {
-  constructor({ repository }) {
-    this.repo = repository
+  constructor({ personRepository }) {
+    this.repo = personRepository
   }
 
-  getOne(id, log) {
-    log.info(`This is the ctx: ${JSON.stringify(id)}`)
+  async getOne(id, log) {
+    log.info(`CONTROLLER: Looking for ID: ${JSON.stringify(id)}`)
 
-    const result = `Person number ${id}`
-    return result
+    try {
+      const result = await this.repo.findOne({ id }, log)
+      log.info(`Result found: ${result}`)
+      return result
+    } catch (error) {
+      log.error(error)
+    }
   }
 
-  getAll(log) {
+  async getAll(log) {
     log.info('Looking for everything')
-    const result = 'ALL people dancing'
-    return result
+
+    try {
+      const result = await this.repo.findAll(log)
+      log.info(`Result found: ${result}`)
+
+      return result
+    } catch (error) {
+      log.error(error)
+    }
   }
 
+  upsert(ctx, log) {
+    log.info(`This is the ctx: ${JSON.stringify(ctx)}`)
 
-  writeHoli(ctx) {
-    this.log.info(`This is the ctx: ${JSON.stringify(ctx)}`)
-
-    const result = this.repo.write(ctx, this.log)
-    this.log.info(`HANDLER LAYER: Result: ${result}`)
+    const result = this.repo.upsert(ctx, this.log)
+    log.info(`HANDLER LAYER: Result: ${result}`)
   }
 }
 

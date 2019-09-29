@@ -1,5 +1,5 @@
-const { addColors, createLogger, format, transports } = require('winston')
-const { combine, timestamp, label, printf } = format
+const { createLogger, format, transports } = require('winston')
+const { timestamp, printf } = format
 const { Lifetime, RESOLVER } = require('awilix')
 
 module.exports = class Logger {
