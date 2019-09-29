@@ -5,6 +5,7 @@ module.exports = () => {
     [
       ['../repositories/repository.js', Lifetime.SCOPED],
       ['../services/*.js', Lifetime.SCOPED] ,
+      ['../logger/*.js', Lifetime.SCOPED] ,
       ['../routes/*.js', Lifetime.SCOPED]
     ],
     {

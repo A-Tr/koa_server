@@ -1,23 +1,23 @@
 const { Lifetime, RESOLVER } = require('awilix')
 
 module.exports = class PersonController {
-  build({ personService }) {
+  build({ personService, logger }) {
     return {
       getPerson: async ctx => {
-        const logger = ctx.state.container.resolve('logger')
-        const result = await personService.getOne(ctx.params.id, logger)
-        logger.info(`Controller result: ${result}`)
+        const log = logger.getLog(ctx)
+        const result = await personService.getOne(ctx.params.id, log)
+        log.info(`Controller result: ${result}`)
       },
 
       getPeople: async ctx => {
-        const logger = ctx.state.container.resolve('logger')
-        const result = await personService.getAll(logger)
-        logger.info(`Controller result: ${result}`)
+        const log = logger.getLog(ctx)
+        const result = await personService.getAll(log)
+        log.info(`Controller result: ${result}`)
       },
 
       upsertPerson: async ctx => {
-        const logger = ctx.state.container.resolve('logger')
-        await personService.create(ctx.body, logger)
+        const log = logger.getLog(ctx)
+        await personService.create(ctx.body, log)
       }
     }
   }
