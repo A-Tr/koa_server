@@ -1,19 +1,25 @@
 const { Lifetime, RESOLVER } = require('awilix')
 
-module.exports = class HoliService {
+module.exports = class PersonService {
   constructor({ repository }) {
     this.repo = repository
   }
 
-  sayHoli(ctx) {
-    this.logger = ctx.state.container.resolve('logger')
-    this.logger.info(`This is the ctx: ${JSON.stringify(ctx)}`)
-    ctx.body = 'OH boi'
-    return
+  getOne(id, logger) {
+    logger.info(`This is the ctx: ${JSON.stringify(id)}`)
+
+    const result = `Person number ${id}`
+    return result
   }
 
+  getAll(logger) {
+    logger.info('Looking for everything')
+    const result = 'ALL people dancing'
+    return result
+  }
+
+
   writeHoli(ctx) {
-    this.logger = ctx.state.container.resolve('logger')
     this.logger.info(`This is the ctx: ${JSON.stringify(ctx)}`)
 
     const result = this.repo.write(ctx, this.logger)
@@ -22,6 +28,6 @@ module.exports = class HoliService {
 }
 
 module.exports[RESOLVER] = {
-  name: 'holiService',
+  name: 'personService',
   lifetime: Lifetime.SCOPED
 }

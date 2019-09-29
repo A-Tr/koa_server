@@ -4,8 +4,8 @@ module.exports = () => {
   const container = createContainer().loadModules(
     [
       ['../repositories/repository.js', Lifetime.SCOPED],
-      ['../services/HoliService.js', Lifetime.SCOPED] ,
-      ['../router/router.js', Lifetime.SCOPED]
+      ['../services/*.js', Lifetime.SCOPED] ,
+      ['../routes/*.js', Lifetime.SCOPED]
     ],
     {
       formatName: 'camelCase',
